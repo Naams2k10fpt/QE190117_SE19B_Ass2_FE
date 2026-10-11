@@ -27,4 +27,4 @@ jobs:
     - name: Typecheck and Build Next.js
       run: npm run build
       env:
-        NEXT_PUBLIC_API_URL: https://qe190117-se19b-ass1-be.onrender.com
+        NEXT_PUBLIC_API_URL: http://localhost:5117

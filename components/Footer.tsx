@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-2">
             <KanbanSquare className="w-5 h-5 text-blue-600" />
             <span className="font-semibold text-slate-800">TaskTrack Management System</span>
-            <span className="text-xs text-slate-400">| PRN232 Assignment 1</span>
+            <span className="text-xs text-slate-400">| PRN232 Assignment 2</span>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-slate-500">

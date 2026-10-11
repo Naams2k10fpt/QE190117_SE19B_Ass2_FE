@@ -6,7 +6,7 @@ import { ToastProvider } from "@/components/ToastContext";
 
 export const metadata: Metadata = {
   title: "TaskTrack - Task & Team Management",
-  description: "Task & Team Management application for PRN232 Assignment 1",
+  description: "Task & Team Management application for PRN232 Assignment 2",
 };
 
 export default function RootLayout({

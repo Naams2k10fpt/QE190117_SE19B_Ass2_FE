@@ -55,7 +55,7 @@ export const Navbar: React.FC = () => {
                   Task<span className="text-blue-600">Track</span>
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                  PRN232 Ass1
+                  PRN232 Ass2
                 </span>
               </div>
             </Link>

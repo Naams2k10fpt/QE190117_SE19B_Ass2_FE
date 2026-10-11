@@ -63,7 +63,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-blue-100 text-xs font-medium border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>PRN232 Assignment 1 — Public Task & Team Hub</span>
+            <span>PRN232 Assignment 2 — Task & Team Hub</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
             Streamline Projects, Departments & Tasks seamlessly
