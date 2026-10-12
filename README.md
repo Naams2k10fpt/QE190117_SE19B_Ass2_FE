@@ -18,15 +18,17 @@ Access and refresh tokens stay in HttpOnly, Secure production cookies with SameS
 2. Copy `.env.example` to `.env.local`. Set `API_URL` and `NEXT_PUBLIC_API_URL` to the API origin without `/api`.
 3. Start the Assignment 2 API at `http://localhost:5117`, then run `npm run dev` and open `http://localhost:3000`.
 
-Run `npm test`, `npm run lint` and `npm run build` before pushing. CI runs these checks. See [tests/README.md](tests/README.md) for the separate HTTP/database regression suite.
+Run `npm test`, `npm run lint` and `npm run build` before pushing. CI runs these checks and a full dependency audit. See [tests/README.md](tests/README.md) for the separate HTTP/database regression suite.
+
+Authenticated users can update their name and password at `/profile`. Name changes update the navbar; password changes sign out every session and return to login. Task details show the recorded creator/updater account IDs, or "Not recorded" for legacy rows. Email and role stay read-only in the profile.
 
 ## Deployment
 
 The [live frontend](https://qe190117-se19b-ass2-fe.vercel.app) runs in the separate Vercel project `qe190117-se19b-ass2-fe`, with functions in Singapore. GitHub `main` is connected. CI triggers a project-scoped Vercel deploy hook after the main branch passes lint, tests and build; its URL is stored only in the `VERCEL_DEPLOY_HOOK` GitHub Actions secret. Both API origins point to `https://qe190117-se19b-ass2-be.onrender.com`, and Render's `FRONTEND_URL` matches this production origin. Grading credentials are provided in the submission document, never in Git.
 
-On 12 October 2026, the live deployment passed 58 frontend HTTP checks and 180 backend assertions. Browser checks verified live Staff registration, login/logout, Admin accounts, keyboard focus in modals and protected redirects. Test fixtures were removed and the original business data matched its pre-test snapshot. Both repositories' CI checks passed.
+On 13 October 2026, local production builds passed 79 frontend HTTP checks and 218 backend assertions, including the profile/password and task updater bonuses. Browser checks verified live Staff registration, login/logout, Admin accounts, keyboard focus in modals and protected redirects. Test fixtures were removed and the original business data matched its pre-test snapshot. Both repositories' CI checks passed.
 
-The free Render backend can take time to wake after inactivity. The reused PostgreSQL instance currently expires on 26 October 2026; maintain availability before grading after that date.
+The free Render backend can take time to wake after inactivity. Server API requests wait up to 90 seconds, with a 120-second function limit and a loading screen for server navigation. This tolerates startup delay without preventing the free service from sleeping. The reused PostgreSQL instance currently expires on 26 October 2026; the owner chose to retain this free instance, so availability after that date is not guaranteed.
 
 ## Dependency checks
 

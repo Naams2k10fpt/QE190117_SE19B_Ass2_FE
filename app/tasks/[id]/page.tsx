@@ -163,6 +163,10 @@ export default function TaskDetailPage() {
           )}
         </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-500">
+          <div><p className="uppercase font-semibold">Created by</p><p className="mt-1 text-slate-800">{task.createdById ? `Account #${task.createdById}` : "Not recorded"}</p></div>
+          <div><p className="uppercase font-semibold">Updated by</p><p className="mt-1 text-slate-800">{task.updatedById ? `Account #${task.updatedById}` : "Not recorded"}</p></div>
+        </div>
         {/* Dates & Timestamps */}
         <div className="pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-500">
           <div className="flex items-center gap-2">

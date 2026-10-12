@@ -135,6 +135,8 @@ export interface TaskDetailDto {
   createdDate: string;
   modifiedDate: string | null;
   tags: TaskTagDto[];
+  createdById: number | null;
+  updatedById: number | null;
 }
 
 export interface CreateTaskDto {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { backendFetch, readTokens } from "@/lib/server-auth";
 
 export const runtime = "nodejs";
+export const maxDuration = 120;
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ path: string[] }> };
 const error = (message: string, status: number) => NextResponse.json({ message }, { status, headers: { "Cache-Control": "no-store" } });

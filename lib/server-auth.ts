@@ -6,7 +6,8 @@ const refreshCookie = "tasktrack_refresh";
 
 export function backendFetch(path: string, init: RequestInit = {}) {
   const origin = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5117";
-  return fetch(new URL(path, origin), { ...init, cache: "no-store", signal: AbortSignal.timeout(30000) });
+  // Free Render instances can take about a minute to wake up.
+  return fetch(new URL(path, origin), { ...init, cache: "no-store", signal: AbortSignal.timeout(90000) });
 }
 
 export async function readTokens() {

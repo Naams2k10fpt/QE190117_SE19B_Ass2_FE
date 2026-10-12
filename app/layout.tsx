@@ -5,6 +5,8 @@ import { Footer } from "@/components/Footer";
 import { ToastProvider } from "@/components/ToastContext";
 import { AuthProvider } from "@/components/AuthContext";
 
+export const maxDuration = 120;
+
 export const metadata: Metadata = {
   title: "TaskTrack - Task & Team Management",
   description: "Task & Team Management application for PRN232 Assignment 2",

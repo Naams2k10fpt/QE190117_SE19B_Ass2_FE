@@ -81,6 +81,12 @@ export const authApi = {
     method: "POST", headers: jsonHeaders, body: JSON.stringify({ fullName, email, password }),
   })),
   logout: async (): Promise<void> => handleResponse(await fetch("/api/auth/logout", { method: "POST" })),
+  updateProfile: async (fullName: string): Promise<AccountDto> => handleResponse(await protectedFetch("/api/auth/profile", {
+    method: "POST", headers: jsonHeaders, body: JSON.stringify({ fullName }),
+  })),
+  changePassword: async (currentPassword: string, newPassword: string): Promise<void> => handleResponse(await protectedFetch("/api/auth/password", {
+    method: "POST", headers: jsonHeaders, body: JSON.stringify({ currentPassword, newPassword }),
+  })),
 };
 
 export const accountsApi = {

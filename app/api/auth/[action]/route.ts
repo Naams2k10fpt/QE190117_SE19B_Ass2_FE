@@ -3,6 +3,7 @@ import { backendFetch, clearTokens, readTokens, serverAccount, writeTokens } fro
 import type { TokenResponseDto } from "@/lib/types";
 
 export const runtime = "nodejs";
+export const maxDuration = 120;
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ action: string }> };
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { "Cache-Control": "no-store" } });
@@ -19,10 +20,13 @@ export async function GET(_request: NextRequest, context: Context) {
 
 export async function POST(request: NextRequest, context: Context) {
   const { action } = await context.params;
-  if (!["login", "register", "refresh", "logout"].includes(action)) return json({ message: "Not found." }, 404);
+  if (!["login", "register", "refresh", "logout", "profile", "password"].includes(action)) return json({ message: "Not found." }, 404);
   if (request.headers.get("origin") !== new URL(request.url).origin)
     return json({ message: "Invalid request origin." }, 403);
   try {
+    const selfUpdate = action === "profile" || action === "password";
+    const { access } = selfUpdate ? await readTokens() : { access: undefined };
+    if (selfUpdate && !access) return json({ message: "Please log in." }, 401);
     let body: string;
     if (action === "refresh" || action === "logout") {
       const { refresh } = await readTokens();
@@ -34,8 +38,11 @@ export async function POST(request: NextRequest, context: Context) {
     } else {
       body = await request.text();
     }
-    const response = await backendFetch(`/api/auth/${action}`, { method: "POST", headers: { "Content-Type": "application/json" }, body });
-    if (action === "logout" && response.ok) {
+    const response = await backendFetch(`/api/auth/${action}`, {
+      method: selfUpdate ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json", ...(access ? { Authorization: `Bearer ${access}` } : {}) }, body,
+    });
+    if ((action === "logout" || action === "password") && response.ok) {
       await clearTokens();
       return new NextResponse(null, { status: 204, headers: { "Cache-Control": "no-store" } });
     }

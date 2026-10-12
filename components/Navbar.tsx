@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  UserRound,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
@@ -38,6 +39,7 @@ export const Navbar: React.FC = () => {
 
   const manageLinks = [
     { label: "Dashboard", href: "/admin", icon: KanbanSquare },
+    { label: "Profile", href: "/profile", icon: UserRound },
     { label: "Departments", href: "/admin/departments", icon: Building2 },
     { label: "Projects", href: "/admin/projects", icon: FolderGit2 },
     { label: "Tasks", href: "/admin/tasks", icon: CheckSquare },
@@ -120,7 +122,7 @@ export const Navbar: React.FC = () => {
                 {manageDropdownOpen && (
                   <div className="absolute left-0 mt-2 w-52 rounded-xl bg-white p-2 shadow-xl border border-slate-100 ring-1 ring-slate-900/5 focus:outline-hidden animate-in fade-in zoom-in-95 duration-100">
                     <div className="px-3 py-1.5 text-[11px] font-semibold uppercase text-slate-400">
-                      Manage Entities (CRUD)
+                      Management
                     </div>
                     {manageLinks.map((item) => {
                       const ItemIcon = item.icon;
@@ -129,6 +131,7 @@ export const Navbar: React.FC = () => {
                         <Link
                           key={item.href}
                           href={item.href}
+                          onClick={() => setManageDropdownOpen(false)}
                           className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition ${
                             active
                               ? "bg-blue-50 text-blue-700"

@@ -28,7 +28,7 @@ async function request(method, path, status, body, jar = new Map(), requestOrigi
   const headers = { Origin: requestOrigin, Cookie: [...jar].map(([key, value]) => `${key}=${value}`).join("; ") };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   const response = await fetch(origin + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), redirect: "manual" });
-  assert.equal(response.status, status, `${method} ${path}: unexpected status`);
+  assert.ok((Array.isArray(status) ? status : [status]).includes(response.status), `${method} ${path}: unexpected status ${response.status}`);
   count++;
   for (const cookie of response.headers.getSetCookie()) {
     const [pair] = cookie.split(";"); const split = pair.indexOf("=");
@@ -38,19 +38,26 @@ async function request(method, path, status, body, jar = new Map(), requestOrigi
   return { response, data: response.status === 204 ? null : type.includes("json") ? await response.json() : await response.text() };
 }
 
+async function redirect(path, destination, jar = new Map()) {
+  const result = await request("GET", path, [200, 307], undefined, jar);
+  if (result.response.status === 307) assert.equal(result.response.headers.get("location"), destination);
+  else assert.ok(result.data.includes(`http-equiv="refresh" content="1;url=${destination}"`), "Streamed page must emit the expected redirect.");
+}
+
 try {
   const guest = new Map();
   for (const path of ["/", "/login", "/register", "/departments", "/projects", "/tags", "/search", "/departments/1", "/projects/1", "/tasks/1"])
     await request("GET", path, 200);
-  for (const path of ["/admin", "/admin/departments", "/admin/projects", "/admin/tasks", "/admin/tags", "/admin/accounts"]) {
-    const result = await request("GET", path, 307);
-    assert.equal(result.response.headers.get("location"), "/login");
+  for (const path of ["/admin", "/admin/departments", "/admin/projects", "/admin/tasks", "/admin/tags", "/admin/accounts", "/profile"]) {
+    await redirect(path, "/login");
   }
   await request("POST", "/api/auth/login", 403, { email: adminEmail, password: adminPassword }, guest, "https://other.example");
   await request("POST", "/api/auth/login", 401, { email: adminEmail, password: "wrong-password" });
   await request("POST", "/api/manage/tags", 401, { tagName: prefix });
   await request("POST", "/api/manage/tags", 403, { tagName: prefix }, guest, "https://other.example");
   await request("POST", "/api/manage/auth/login", 404, { });
+  await request("POST", "/api/auth/profile", 401, { fullName: prefix });
+  await request("POST", "/api/auth/password", 401, { currentPassword: password, newPassword: password + "new" });
 
   await request("POST", "/api/auth/register", 201, { fullName: prefix, email, password });
   await request("POST", "/api/auth/register", 409, { fullName: prefix, email, password });
@@ -64,12 +71,20 @@ try {
   const session = await request("GET", "/api/auth/session", 200, undefined, staff);
   assert.equal(session.data.fullName, prefix);
   assert.equal(session.response.headers.get("cache-control"), "no-store");
+  await request("GET", "/profile", 200, undefined, staff);
+  await request("POST", "/api/auth/profile", 403, { fullName: prefix }, staff, "https://other.example");
+  await request("POST", "/api/auth/password", 403, { currentPassword: password, newPassword: password + "new" }, staff, "https://other.example");
+  await request("POST", "/api/auth/profile", 400, { fullName: " " }, staff);
+  await request("POST", "/api/auth/profile", 400, { fullName: "x".repeat(101) }, staff);
+  const updatedProfile = await request("POST", "/api/auth/profile", 200, { fullName: "  " + prefix + " Profile  ", role: 1, accountId: 2147483647 }, staff);
+  assert.equal(updatedProfile.data.fullName, prefix + " Profile");
+  assert.equal(updatedProfile.data.role, 0);
+  assert.equal(updatedProfile.data.accountId, login.data.accountId);
   await request("GET", "/admin", 200, undefined, staff);
   for (const resource of ["departments", "projects", "tasks", "tags"])
     await request("GET", "/admin/" + resource, 200, undefined, staff);
   await request("GET", "/api/manage/accounts", 403, undefined, staff);
-  const forbiddenPage = await request("GET", "/admin/accounts", 307, undefined, staff);
-  assert.equal(forbiddenPage.response.headers.get("location"), "/admin");
+  await redirect("/admin/accounts", "/admin", staff);
 
   const department = (await request("POST", "/api/manage/departments", 201, { departmentName: prefix, departmentDescription: "Frontend fixture" }, staff)).data;
   await request("PUT", "/api/manage/departments/" + department.departmentId, 204, { departmentName: prefix, departmentDescription: "Updated", isActive: true }, staff);
@@ -79,18 +94,41 @@ try {
   await request("PUT", "/api/manage/tags/" + tag.tagId, 204, { tagName: prefix, color: "#abcdef" }, staff);
   const task = (await request("POST", "/api/manage/tasks", 201, { title: prefix, status: 0, priority: 0, projectId: project.projectId, tagIds: [tag.tagId] }, staff)).data;
   assert.equal(task.priority, 0);
+  assert.equal(task.createdById, login.data.accountId);
+  assert.equal(task.updatedById, null);
   await request("PUT", "/api/manage/tasks/" + task.taskId, 204, { title: prefix, status: 2, priority: 3, projectId: project.projectId, tagIds: [] }, staff);
+  const auditedTask = await fetch(api + "/api/tasks/" + task.taskId);
+  assert.equal(auditedTask.status, 200);
+  assert.equal((await auditedTask.json()).updatedById, login.data.accountId);
   await request("DELETE", "/api/manage/tasks/" + task.taskId, 204, undefined, staff);
   await request("DELETE", "/api/manage/tags/" + tag.tagId, 204, undefined, staff);
 
   const admin = new Map();
   await request("POST", "/api/auth/login", 200, { email: adminEmail, password: adminPassword }, admin);
   await request("GET", "/admin/accounts", 200, undefined, admin);
+  await request("GET", "/profile", 200, undefined, admin);
   const list = (await request("GET", "/api/manage/accounts", 200, undefined, admin)).data;
   assert.ok(list.some(a => a.accountId === login.data.accountId));
   assert.ok(list.every(a => !("passwordHash" in a)), "Admin response must not expose password hashes.");
   await request("PUT", "/api/manage/accounts/" + login.data.accountId, 204, { fullName: prefix + " Updated", role: 0 }, admin);
   await request("DELETE", "/api/manage/accounts/" + login.data.accountId, 409, undefined, admin);
+
+  await request("POST", "/api/auth/password", 400, { currentPassword: "wrong-password", newPassword: password + "new" }, staff);
+  await request("POST", "/api/auth/password", 400, { currentPassword: password, newPassword: "short" }, staff);
+  await request("GET", "/api/auth/session", 200, undefined, staff);
+  const passwordOldAccess = staff.get("tasktrack_access");
+  const passwordOldRefresh = staff.get("tasktrack_refresh");
+  await request("POST", "/api/auth/password", 204, { currentPassword: password, newPassword: password + "new" }, staff);
+  assert.ok(!staff.get("tasktrack_access") && !staff.get("tasktrack_refresh"), "Password change must clear both cookies.");
+  await request("GET", "/api/auth/session", 401, undefined, staff);
+  await redirect("/profile", "/login", staff);
+  await request("POST", "/api/auth/login", 401, { email, password });
+  await request("POST", "/api/auth/refresh", 401, undefined, new Map([["tasktrack_refresh", passwordOldRefresh]]));
+  const revokedPasswordAccess = await fetch(api + "/api/auth/me", { headers: { Authorization: "Bearer " + passwordOldAccess } });
+  assert.equal(revokedPasswordAccess.status, 401);
+  await request("POST", "/api/auth/login", 200, { email, password: password + "new" }, staff);
+  await request("POST", "/api/auth/password", 204, { currentPassword: password + "new", newPassword: password }, staff);
+  await request("POST", "/api/auth/login", 200, { email, password }, staff);
 
   const originalRefresh = staff.get("tasktrack_refresh");
   const parts = staff.get("tasktrack_access").split(".");
@@ -105,7 +143,7 @@ try {
   await request("GET", "/api/auth/session", 200, undefined, staff);
   await request("POST", "/api/auth/logout", 204, undefined, staff);
   await request("GET", "/api/auth/session", 401, undefined, staff);
-  await request("GET", "/admin", 307, undefined, staff);
+  await redirect("/admin", "/login", staff);
   const stale = await fetch(api + "/api/auth/me", { headers: { Authorization: "Bearer " + refresh.response.headers.getSetCookie().find(c => c.startsWith("tasktrack_access=")).split(";")[0].split("=")[1] } });
   assert.equal(stale.status, 401, "Logout must revoke the access token at the backend.");
   assert.ok(Number.isSafeInteger(task.taskId) && task.taskId > 0 && Number.isSafeInteger(login.data.accountId) && login.data.accountId > 0);
@@ -123,4 +161,4 @@ DELETE FROM public."Department" WHERE "DepartmentName" LIKE :'fixture_prefix';
 DELETE FROM public."SystemAccount" WHERE "Email" LIKE :'fixture_prefix';`);
   assert.equal(snapshot(), baseline, "Business data must be unchanged after fixture cleanup.");
 }
-console.log(`PASS: ${count} frontend HTTP checks; public/protected pages, cookie secrecy/flags, CSRF, Staff/Admin CRUD, refresh and logout; fixtures cleaned and original data unchanged.`);
+console.log(`PASS: ${count} frontend HTTP checks; public/protected pages, cookie secrecy/flags, CSRF, Staff/Admin CRUD, profile/password changes, task audit, refresh and logout; fixtures cleaned and original data unchanged.`);

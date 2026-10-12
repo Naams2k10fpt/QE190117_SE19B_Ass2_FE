@@ -9,7 +9,8 @@
     "lint": "next lint",
     "pretest": "tsc lib/auth-client.ts --outDir .checks --target ES2020 --module commonjs --skipLibCheck",
     "test": "node tests/auth-client-checks.mjs",
-    "test:http": "node tests/http-checks.mjs"
+    "test:http": "node tests/http-checks.mjs",
+    "test:cold-start": "node tests/cold-start-check.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.469.0",

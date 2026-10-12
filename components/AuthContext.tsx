@@ -11,6 +11,7 @@ type AuthState = {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfile: (fullName: string) => Promise<void>;
 };
 const AuthContext = createContext<AuthState | null>(null);
 
@@ -31,7 +32,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAccount(null);
     window.location.assign("/");
   }, []);
-  return <AuthContext.Provider value={{ account, loading, login, logout }}>{children}</AuthContext.Provider>;
+  const updateProfile = useCallback(async (fullName: string) => {
+    setAccount(await authApi.updateProfile(fullName));
+  }, []);
+  return <AuthContext.Provider value={{ account, loading, login, logout, updateProfile }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
