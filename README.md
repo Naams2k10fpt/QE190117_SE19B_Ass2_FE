@@ -22,7 +22,11 @@ Run `npm test`, `npm run lint` and `npm run build` before pushing. CI runs these
 
 ## Deployment
 
-Deploy this repository as a separate Vercel Next.js project. Set both API origins to `https://qe190117-se19b-ass2-be.onrender.com`, and set the Render backend's `FRONTEND_URL` to the production frontend origin. Grading credentials are provided in the submission document, never in Git.
+The [live frontend](https://qe190117-se19b-ass2-fe.vercel.app) runs in the separate Vercel project `qe190117-se19b-ass2-fe`, with functions in Singapore. GitHub `main` is connected for automatic deployment. Both API origins point to `https://qe190117-se19b-ass2-be.onrender.com`, and Render's `FRONTEND_URL` matches this production origin. Grading credentials are provided in the submission document, never in Git.
+
+On 12 October 2026, the live deployment passed 58 frontend HTTP checks and 180 backend assertions. Browser checks verified live Staff registration, login/logout, Admin accounts, keyboard focus in modals and protected redirects. Test fixtures were removed and the original business data matched its pre-test snapshot. Both repositories' CI checks passed.
+
+The free Render backend can take time to wake after inactivity. The reused PostgreSQL instance currently expires on 26 October 2026; maintain availability before grading after that date.
 
 ## Dependency checks
 
