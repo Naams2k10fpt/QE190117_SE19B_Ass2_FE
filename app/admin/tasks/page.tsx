@@ -578,6 +578,7 @@ export default function TaskManagePage() {
                     <button
                       type="button"
                       key={tg.tagId}
+                      aria-pressed={isSelected}
                       onClick={() => toggleTagSelection(tg.tagId)}
                       style={{
                         backgroundColor: isSelected ? `${color}25` : "white",
