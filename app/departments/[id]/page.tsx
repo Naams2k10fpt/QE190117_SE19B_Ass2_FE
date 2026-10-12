@@ -86,7 +86,7 @@ export default function DepartmentDetailPage() {
       </div>
 
       {/* Department Info Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-sm">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
@@ -122,7 +122,7 @@ export default function DepartmentDetailPage() {
             </Link>
             <Link
               href="/admin/projects"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-xs transition"
             >
               <PlusCircle className="w-4 h-4" />
               New Project

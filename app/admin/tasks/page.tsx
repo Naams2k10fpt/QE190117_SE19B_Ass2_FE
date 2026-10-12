@@ -261,7 +261,7 @@ export default function TaskManagePage() {
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Add Task
@@ -269,14 +269,14 @@ export default function TaskManagePage() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 items-center">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 items-center">
         <div>
           <input
             type="text"
             placeholder="Search by title..."
             value={titleFilter}
             onChange={(e) => setTitleFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
 
@@ -284,7 +284,7 @@ export default function TaskManagePage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Statuses</option>
             <option value="0">To Do</option>
@@ -298,7 +298,7 @@ export default function TaskManagePage() {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Priorities</option>
             <option value="0">Low</option>
@@ -312,7 +312,7 @@ export default function TaskManagePage() {
           <select
             value={projectFilter}
             onChange={(e) => setProjectFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Projects</option>
             {projects.map((p) => (
@@ -345,7 +345,7 @@ export default function TaskManagePage() {
       </div>
 
       {/* Tasks Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Loading tasks..." />
         ) : tasks.length === 0 ? (
@@ -457,7 +457,7 @@ export default function TaskManagePage() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Implement authentication middleware"
               maxLength={300}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                 formErrors.title
                   ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                   : "border-slate-200 focus:border-blue-500"
@@ -475,7 +475,7 @@ export default function TaskManagePage() {
             <select
               value={projectId}
               onChange={(e) => setProjectId(Number(e.target.value))}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                 formErrors.projectId
                   ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                   : "border-slate-200 focus:border-blue-500"
@@ -504,7 +504,7 @@ export default function TaskManagePage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Detailed acceptance criteria and technical notes..."
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500 transition"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500 transition"
             />
           </div>
 
@@ -516,7 +516,7 @@ export default function TaskManagePage() {
               <select
                 value={status}
                 onChange={(e) => setStatus(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500"
               >
                 <option value={0}>0 — To Do</option>
                 <option value={1}>1 — In Progress</option>
@@ -532,7 +532,7 @@ export default function TaskManagePage() {
               <select
                 value={priority}
                 onChange={(e) => setPriority(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500"
               >
                 <option value={0}>0 — Low</option>
                 <option value={1}>1 — Medium</option>
@@ -549,7 +549,7 @@ export default function TaskManagePage() {
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500"
               />
             </div>
           </div>
@@ -587,7 +587,7 @@ export default function TaskManagePage() {
                       }}
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium border transition transform ${
                         isSelected
-                          ? "scale-105 font-bold shadow-sm"
+                          ? "scale-105 font-bold shadow-xs"
                           : "hover:border-slate-300"
                       }`}
                     >
@@ -616,7 +616,7 @@ export default function TaskManagePage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-xs transition disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               {modalMode === "create" ? "Create Task" : "Save Changes"}

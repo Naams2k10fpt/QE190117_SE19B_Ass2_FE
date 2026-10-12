@@ -80,7 +80,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
             <div className="flex-1 font-medium">{toast.message}</div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-gray-400 hover:text-gray-600 p-0.5 rounded transition"
+              className="text-gray-400 hover:text-gray-600 p-0.5 rounded-sm transition"
               aria-label="Close toast"
             >
               <X className="w-4 h-4" />

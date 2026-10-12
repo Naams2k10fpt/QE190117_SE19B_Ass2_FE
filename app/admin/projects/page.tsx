@@ -246,7 +246,7 @@ export default function ProjectManagePage() {
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Add Project
@@ -254,14 +254,14 @@ export default function ProjectManagePage() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-center">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-center">
         <div>
           <input
             type="text"
             placeholder="Search by project name..."
             value={nameFilter}
             onChange={(e) => setNameFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
 
@@ -269,7 +269,7 @@ export default function ProjectManagePage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Statuses</option>
             <option value="0">Not Started</option>
@@ -283,7 +283,7 @@ export default function ProjectManagePage() {
           <select
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
-            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Departments</option>
             {departments.map((d) => (
@@ -313,7 +313,7 @@ export default function ProjectManagePage() {
       </div>
 
       {/* Projects Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Loading projects..." />
         ) : projects.length === 0 ? (
@@ -418,7 +418,7 @@ export default function ProjectManagePage() {
               onChange={(e) => setProjectName(e.target.value)}
               placeholder="e.g. Website Revamp 2026"
               maxLength={200}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                 formErrors.projectName
                   ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                   : "border-slate-200 focus:border-blue-500"
@@ -438,7 +438,7 @@ export default function ProjectManagePage() {
             <select
               value={departmentId}
               onChange={(e) => setDepartmentId(Number(e.target.value))}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                 formErrors.departmentId
                   ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                   : "border-slate-200 focus:border-blue-500"
@@ -467,7 +467,7 @@ export default function ProjectManagePage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Project goals, objectives, and deliverables..."
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500 transition"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500 transition"
             />
           </div>
 
@@ -480,7 +480,7 @@ export default function ProjectManagePage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+                className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                   formErrors.startDate
                     ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                     : "border-slate-200 focus:border-blue-500"
@@ -501,7 +501,7 @@ export default function ProjectManagePage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+                className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                   formErrors.endDate
                     ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                     : "border-slate-200 focus:border-blue-500"
@@ -522,7 +522,7 @@ export default function ProjectManagePage() {
             <select
               value={status}
               onChange={(e) => setStatus(Number(e.target.value))}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-blue-500"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-hidden focus:border-blue-500"
             >
               <option value={0}>0 — Not Started</option>
               <option value={1}>1 — In Progress</option>
@@ -538,7 +538,7 @@ export default function ProjectManagePage() {
                 id="isActiveProj"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 border-slate-300 rounded-sm focus:ring-blue-500"
               />
               <label
                 htmlFor="isActiveProj"
@@ -561,7 +561,7 @@ export default function ProjectManagePage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-xs transition disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               {modalMode === "create" ? "Create Project" : "Save Changes"}

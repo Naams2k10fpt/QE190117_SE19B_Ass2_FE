@@ -59,9 +59,9 @@ export default function HomePage() {
   return (
     <div className="space-y-10">
       {/* Hero / Welcome Banner */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 text-white p-8 md:p-12 shadow-xl shadow-blue-900/10">
+      <section className="relative overflow-hidden rounded-3xl bg-linear-to-r from-blue-700 via-indigo-600 to-blue-800 text-white p-8 md:p-12 shadow-xl shadow-blue-900/10">
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur text-blue-100 text-xs font-medium border border-white/20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-blue-100 text-xs font-medium border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span>PRN232 Assignment 2 — Task & Team Hub</span>
           </div>
@@ -97,7 +97,7 @@ export default function HomePage() {
 
       {/* Summary Counts Section */}
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -122,7 +122,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -147,7 +147,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+        <div className="relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">

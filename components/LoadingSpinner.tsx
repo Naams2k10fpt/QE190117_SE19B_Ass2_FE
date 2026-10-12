@@ -24,12 +24,12 @@ export const CardSkeleton: React.FC<{ count?: number }> = ({ count = 3 }) => {
           key={idx}
           className="bg-white rounded-xl border border-slate-200 p-6 animate-pulse"
         >
-          <div className="h-5 bg-slate-200 rounded w-2/3 mb-4"></div>
-          <div className="h-4 bg-slate-100 rounded w-full mb-2"></div>
-          <div className="h-4 bg-slate-100 rounded w-4/5 mb-6"></div>
+          <div className="h-5 bg-slate-200 rounded-sm w-2/3 mb-4"></div>
+          <div className="h-4 bg-slate-100 rounded-sm w-full mb-2"></div>
+          <div className="h-4 bg-slate-100 rounded-sm w-4/5 mb-6"></div>
           <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-            <div className="h-4 bg-slate-200 rounded w-1/4"></div>
-            <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+            <div className="h-4 bg-slate-200 rounded-sm w-1/4"></div>
+            <div className="h-4 bg-slate-200 rounded-sm w-1/4"></div>
           </div>
         </div>
       ))}

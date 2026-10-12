@@ -181,7 +181,7 @@ export default function TagManagePage() {
         </div>
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Add Tag
@@ -189,7 +189,7 @@ export default function TagManagePage() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
         <Search className="w-5 h-5 text-slate-400 shrink-0" />
         <input
           type="text"
@@ -199,7 +199,7 @@ export default function TagManagePage() {
             setSearchFilter(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full text-sm bg-transparent border-none focus:outline-none placeholder-slate-400"
+          className="w-full text-sm bg-transparent border-none focus:outline-hidden placeholder-slate-400"
         />
         {searchFilter && (
           <button
@@ -215,7 +215,7 @@ export default function TagManagePage() {
       </div>
 
       {/* Tags Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         {loading ? (
           <LoadingSpinner text="Loading tags..." />
         ) : filteredTags.length === 0 ? (
@@ -315,7 +315,7 @@ export default function TagManagePage() {
               onChange={(e) => setTagName(e.target.value)}
               placeholder="e.g. Bug, Frontend, Priority 1"
               maxLength={50}
-              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition ${
+              className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-hidden transition ${
                 formErrors.tagName
                   ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                   : "border-slate-200 focus:border-blue-500"
@@ -343,7 +343,7 @@ export default function TagManagePage() {
                 onChange={(e) => setColor(e.target.value)}
                 placeholder="#RRGGBB"
                 maxLength={7}
-                className={`flex-1 font-mono uppercase px-3.5 py-2 rounded-xl border text-sm focus:outline-none transition ${
+                className={`flex-1 font-mono uppercase px-3.5 py-2 rounded-xl border text-sm focus:outline-hidden transition ${
                   formErrors.color
                     ? "border-rose-300 bg-rose-50/30 focus:border-rose-500"
                     : "border-slate-200 focus:border-blue-500"
@@ -398,7 +398,7 @@ export default function TagManagePage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-xs transition disabled:opacity-50"
             >
               {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
               {modalMode === "create" ? "Create Tag" : "Save Changes"}

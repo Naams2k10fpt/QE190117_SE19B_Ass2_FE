@@ -30,4 +30,4 @@ The free Render backend can take time to wake after inactivity. The reused Postg
 
 ## Dependency checks
 
-Next.js and its ESLint configuration are pinned to 15.5.27. The production dependency audit reports zero vulnerabilities. The full audit retains nine development/build dependency advisories; forcing npm's suggested Tailwind major migration is outside this assignment's scope.
+Next.js and its ESLint configuration are pinned to 15.5.27. Tailwind CSS/PostCSS use 4.3.3 and CI uses Node 24. The Next lint plugin is pinned to its glob-based 14.2.35 release, with glob 10.5.0, to remove the unpatched braces/fast-glob dependency path while retaining the lint rules. Full and production dependency audits report zero vulnerabilities. Lint, auth-client tests, production build and a browser layout check passed after the upgrade. Tailwind 4 requires modern browsers (Chrome 111+, Safari 16.4+, Firefox 128+).

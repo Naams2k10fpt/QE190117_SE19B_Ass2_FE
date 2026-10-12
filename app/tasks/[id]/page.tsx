@@ -90,11 +90,11 @@ export default function TaskDetailPage() {
       </div>
 
       {/* Main Task Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs space-y-6">
         {/* Top Badges & Meta */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-xs font-mono font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+            <span className="text-xs font-mono font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-sm">
               TASK #{task.taskId}
             </span>
             <TaskStatusBadge status={task.status} />

@@ -109,7 +109,7 @@ export default function SearchPage() {
       </div>
 
       {/* Filter Panel */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-700">
             <Filter className="w-4 h-4 text-blue-600" />
@@ -140,7 +140,7 @@ export default function SearchPage() {
                 placeholder="Search title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
               />
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function SearchPage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">All Statuses</option>
               <option value="0">To Do</option>
@@ -171,7 +171,7 @@ export default function SearchPage() {
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">All Priorities</option>
               <option value="0">Low</option>
@@ -189,7 +189,7 @@ export default function SearchPage() {
             <select
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">All Projects</option>
               {projects.map((p) => (
@@ -208,7 +208,7 @@ export default function SearchPage() {
             <select
               value={tagId}
               onChange={(e) => setTagId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">All Tags</option>
               {tags.map((tg) => (

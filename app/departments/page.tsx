@@ -73,7 +73,7 @@ export default function DepartmentsPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/admin/departments"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-xs"
           >
             Manage Departments
           </Link>
@@ -81,7 +81,7 @@ export default function DepartmentsPage() {
       </div>
 
       {/* Search Input Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
         <form onSubmit={handleSearchSubmit} className="flex gap-3">
           <div className="relative flex-1">
             <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -90,7 +90,7 @@ export default function DepartmentsPage() {
               placeholder="Search departments by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             />
           </div>
           <button

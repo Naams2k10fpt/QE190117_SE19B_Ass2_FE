@@ -97,7 +97,7 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Project Overview Banner */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-sm">
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2.5">
@@ -155,7 +155,7 @@ export default function ProjectDetailPage() {
             </Link>
             <Link
               href="/admin/tasks"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-xs transition"
             >
               <PlusCircle className="w-4 h-4" />
               Add Task
@@ -181,7 +181,7 @@ export default function ProjectDetailPage() {
             <select
               value={taskStatusFilter}
               onChange={(e) => setTaskStatusFilter(e.target.value)}
-              className="text-xs font-medium bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="text-xs font-medium bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="ALL">All Tasks ({project.tasks?.length || 0})</option>
               <option value="0">To Do</option>
