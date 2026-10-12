@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "./AuthContext";
+import { useToast } from "./ToastContext";
 import {
   KanbanSquare,
   Building2,
@@ -17,6 +19,9 @@ import {
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const { account, loading, logout } = useAuth();
+  const { error } = useToast();
+  const [loggingOut, setLoggingOut] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [manageDropdownOpen, setManageDropdownOpen] = useState(false);
 
@@ -32,13 +37,24 @@ export const Navbar: React.FC = () => {
   ];
 
   const manageLinks = [
-    { label: "Departments", href: "/departments/manage", icon: Building2 },
-    { label: "Projects", href: "/projects/manage", icon: FolderGit2 },
-    { label: "Tasks", href: "/tasks/manage", icon: CheckSquare },
-    { label: "Tags", href: "/tags/manage", icon: Tag },
+    { label: "Dashboard", href: "/admin", icon: KanbanSquare },
+    { label: "Departments", href: "/admin/departments", icon: Building2 },
+    { label: "Projects", href: "/admin/projects", icon: FolderGit2 },
+    { label: "Tasks", href: "/admin/tasks", icon: CheckSquare },
+    { label: "Tags", href: "/admin/tags", icon: Tag },
+    ...(account?.role === 1 ? [{ label: "Accounts", href: "/admin/accounts", icon: Building2 }] : []),
   ];
 
   const isManageActive = manageLinks.some((l) => pathname.startsWith(l.href));
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try { await logout(); }
+    catch (reason) {
+      error(reason instanceof Error ? reason.message : "Logout failed. Please try again.");
+      setLoggingOut(false);
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
@@ -82,11 +98,11 @@ export const Navbar: React.FC = () => {
               })}
 
               {/* Management Dropdown */}
-              <div className="relative">
+              {account && <div className="relative" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setManageDropdownOpen(false); }}>
                 <button
                   type="button"
                   onClick={() => setManageDropdownOpen(!manageDropdownOpen)}
-                  onBlur={() => setTimeout(() => setManageDropdownOpen(false), 200)}
+                  aria-expanded={manageDropdownOpen}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition ${
                     isManageActive
                       ? "bg-blue-50 text-blue-700"
@@ -126,24 +142,25 @@ export const Navbar: React.FC = () => {
                     })}
                   </div>
                 )}
-              </div>
+              </div>}
             </nav>
           </div>
 
           {/* Quick Action Button & Mobile toggle */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/tasks/manage"
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition"
-            >
-              <CheckSquare className="w-4 h-4" />
-              Manage Tasks
-            </Link>
+            {loading ? <span className="text-sm text-slate-500">Checking session…</span> : account ? <>
+              <span className="hidden sm:block max-w-40 truncate text-sm font-medium" title={account.fullName}>{account.fullName}</span>
+              <button type="button" onClick={() => { void handleLogout(); }} disabled={loggingOut} className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-50">{loggingOut ? "Logging out…" : "Logout"}</button>
+            </> : <>
+              <Link href="/login" className="rounded-lg px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50">Login</Link>
+              <Link href="/register" className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">Register</Link>
+            </>}
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -154,6 +171,7 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
+        {account && <p className="sm:hidden pb-2 text-sm font-medium text-slate-600 truncate" title={account.fullName}>{account.fullName}</p>}
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-200 space-y-1 animate-in slide-in-from-top-2">
@@ -179,7 +197,7 @@ export const Navbar: React.FC = () => {
               );
             })}
 
-            <div className="pt-2 px-3 py-1 text-xs font-semibold uppercase text-slate-400">
+            {account && <><div className="pt-2 px-3 py-1 text-xs font-semibold uppercase text-slate-400">
               CRUD Management
             </div>
             {manageLinks.map((item) => {
@@ -199,7 +217,7 @@ export const Navbar: React.FC = () => {
                   {item.label} Management
                 </Link>
               );
-            })}
+            })}</>}
           </div>
         )}
       </div>

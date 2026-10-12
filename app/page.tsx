@@ -69,13 +69,12 @@ export default function HomePage() {
             Streamline Projects, Departments & Tasks seamlessly
           </h1>
           <p className="text-blue-100 text-base sm:text-lg leading-relaxed max-w-2xl">
-            A comprehensive, public management portal connecting organizational
-            departments, active project milestones, and actionable team tasks
-            with full CRUD controls.
+            Browse departments, projects and tasks publicly. Sign in to create,
+            update and manage your team&apos;s work.
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <Link
-              href="/projects/manage"
+              href="/admin/projects"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold bg-white text-blue-700 hover:bg-blue-50 transition shadow-md"
             >
               <PlusCircle className="w-4 h-4" />
@@ -140,7 +139,7 @@ export default function HomePage() {
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span>Ongoing initiatives</span>
             <Link
-              href="/projects/manage"
+              href="/admin/projects"
               className="text-indigo-600 font-semibold hover:underline inline-flex items-center gap-1"
             >
               Manage &rarr;
@@ -187,7 +186,7 @@ export default function HomePage() {
             </p>
           </div>
           <Link
-            href="/projects/manage"
+            href="/admin/projects"
             className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition"
           >
             Manage all projects
@@ -202,7 +201,7 @@ export default function HomePage() {
             title="No Active Projects"
             description="There are currently no active projects recorded in the system. Get started by creating one."
             actionText="Create New Project"
-            onAction={() => (window.location.href = "/projects/manage")}
+            onAction={() => (window.location.href = "/admin/projects")}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

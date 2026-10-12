@@ -1,4 +1,5 @@
 import {
+  AccountDto,
   DepartmentDetailDto,
   DepartmentListItemDto,
   CreateDepartmentDto,
@@ -16,6 +17,7 @@ import {
   TaskTagDto,
   CreateTagDto,
 } from "./types";
+import { protectedFetch } from "./auth-client";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
@@ -71,6 +73,24 @@ const readHeaders = {
 };
 const jsonHeaders = { ...readHeaders, "Content-Type": "application/json" };
 
+export const authApi = {
+  login: async (email: string, password: string): Promise<AccountDto> => handleResponse(await fetch("/api/auth/login", {
+    method: "POST", headers: jsonHeaders, body: JSON.stringify({ email, password }),
+  })),
+  register: async (fullName: string, email: string, password: string): Promise<AccountDto> => handleResponse(await fetch("/api/auth/register", {
+    method: "POST", headers: jsonHeaders, body: JSON.stringify({ fullName, email, password }),
+  })),
+  logout: async (): Promise<void> => handleResponse(await fetch("/api/auth/logout", { method: "POST" })),
+};
+
+export const accountsApi = {
+  getAll: async (): Promise<AccountDto[]> => handleResponse(await protectedFetch("/api/manage/accounts", { cache: "no-store" })),
+  update: async (id: number, fullName: string, role: number): Promise<void> => handleResponse(await protectedFetch(`/api/manage/accounts/${id}`, {
+    method: "PUT", headers: jsonHeaders, body: JSON.stringify({ fullName, role }),
+  })),
+  delete: async (id: number): Promise<void> => handleResponse(await protectedFetch(`/api/manage/accounts/${id}`, { method: "DELETE" })),
+};
+
 // Department API
 export const departmentsApi = {
   getAll: async (): Promise<DepartmentListItemDto[]> => {
@@ -101,7 +121,7 @@ export const departmentsApi = {
   },
 
   create: async (data: CreateDepartmentDto): Promise<DepartmentDetailDto> => {
-    const res = await fetch(`${API_BASE_URL}/api/departments`, {
+    const res = await protectedFetch(`/api/manage/departments`, {
       method: "POST",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -110,7 +130,7 @@ export const departmentsApi = {
   },
 
   update: async (id: number, data: UpdateDepartmentDto): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/departments/${id}`, {
+    const res = await protectedFetch(`/api/manage/departments/${id}`, {
       method: "PUT",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -119,7 +139,7 @@ export const departmentsApi = {
   },
 
   delete: async (id: number): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/departments/${id}`, {
+    const res = await protectedFetch(`/api/manage/departments/${id}`, {
       method: "DELETE",
       headers: readHeaders,
     });
@@ -180,7 +200,7 @@ export const projectsApi = {
   },
 
   create: async (data: CreateProjectDto): Promise<ProjectDetailDto> => {
-    const res = await fetch(`${API_BASE_URL}/api/projects`, {
+    const res = await protectedFetch(`/api/manage/projects`, {
       method: "POST",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -189,7 +209,7 @@ export const projectsApi = {
   },
 
   update: async (id: number, data: UpdateProjectDto): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/projects/${id}`, {
+    const res = await protectedFetch(`/api/manage/projects/${id}`, {
       method: "PUT",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -198,7 +218,7 @@ export const projectsApi = {
   },
 
   delete: async (id: number): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/projects/${id}`, {
+    const res = await protectedFetch(`/api/manage/projects/${id}`, {
       method: "DELETE",
       headers: readHeaders,
     });
@@ -256,7 +276,7 @@ export const tasksApi = {
   },
 
   create: async (data: CreateTaskDto): Promise<TaskDetailDto> => {
-    const res = await fetch(`${API_BASE_URL}/api/tasks`, {
+    const res = await protectedFetch(`/api/manage/tasks`, {
       method: "POST",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -265,7 +285,7 @@ export const tasksApi = {
   },
 
   update: async (id: number, data: UpdateTaskDto): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+    const res = await protectedFetch(`/api/manage/tasks/${id}`, {
       method: "PUT",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -274,7 +294,7 @@ export const tasksApi = {
   },
 
   delete: async (id: number): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+    const res = await protectedFetch(`/api/manage/tasks/${id}`, {
       method: "DELETE",
       headers: readHeaders,
     });
@@ -293,7 +313,7 @@ export const tagsApi = {
   },
 
   create: async (data: CreateTagDto): Promise<TaskTagDto> => {
-    const res = await fetch(`${API_BASE_URL}/api/tags`, {
+    const res = await protectedFetch(`/api/manage/tags`, {
       method: "POST",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -302,7 +322,7 @@ export const tagsApi = {
   },
 
   update: async (id: number, data: CreateTagDto): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/tags/${id}`, {
+    const res = await protectedFetch(`/api/manage/tags/${id}`, {
       method: "PUT",
       headers: jsonHeaders,
       body: JSON.stringify(data),
@@ -311,7 +331,7 @@ export const tagsApi = {
   },
 
   delete: async (id: number): Promise<void> => {
-    const res = await fetch(`${API_BASE_URL}/api/tags/${id}`, {
+    const res = await protectedFetch(`/api/manage/tags/${id}`, {
       method: "DELETE",
       headers: readHeaders,
     });

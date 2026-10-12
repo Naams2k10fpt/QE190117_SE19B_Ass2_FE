@@ -115,13 +115,13 @@ export default function DepartmentDetailPage() {
 
           <div className="shrink-0 flex items-center gap-3">
             <Link
-              href="/departments/manage"
+              href="/admin/departments"
               className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition"
             >
               Edit Department
             </Link>
             <Link
-              href="/projects/manage"
+              href="/admin/projects"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition"
             >
               <PlusCircle className="w-4 h-4" />
@@ -145,7 +145,7 @@ export default function DepartmentDetailPage() {
             title="No Projects in this Department"
             description="There are currently no active projects assigned to this department."
             actionText="Create Project"
-            onAction={() => router.push("/projects/manage")}
+            onAction={() => router.push("/admin/projects")}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

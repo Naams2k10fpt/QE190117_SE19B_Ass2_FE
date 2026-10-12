@@ -72,7 +72,7 @@ export default function DepartmentsPage() {
         </div>
         <div className="flex items-center gap-3">
           <Link
-            href="/departments/manage"
+            href="/admin/departments"
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm"
           >
             Manage Departments
@@ -126,7 +126,7 @@ export default function DepartmentsPage() {
               : "No active departments currently exist."
           }
           actionText="Create Department"
-          onAction={() => (window.location.href = "/departments/manage")}
+          onAction={() => (window.location.href = "/admin/departments")}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

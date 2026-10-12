@@ -148,13 +148,13 @@ export default function ProjectDetailPage() {
 
           <div className="shrink-0 flex items-center gap-3">
             <Link
-              href="/projects/manage"
+              href="/admin/projects"
               className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition"
             >
               Edit Project
             </Link>
             <Link
-              href="/tasks/manage"
+              href="/admin/tasks"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-sm transition"
             >
               <PlusCircle className="w-4 h-4" />
@@ -201,7 +201,7 @@ export default function ProjectDetailPage() {
                 : "No tasks are currently associated with this project."
             }
             actionText="Create New Task"
-            onAction={() => (window.location.href = "/tasks/manage")}
+            onAction={() => (window.location.href = "/admin/tasks")}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

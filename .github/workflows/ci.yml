@@ -24,6 +24,9 @@ jobs:
     - name: Lint
       run: npm run lint
 
+    - name: Auth client checks
+      run: npm test
+
     - name: Typecheck and Build Next.js
       run: npm run build
       env:

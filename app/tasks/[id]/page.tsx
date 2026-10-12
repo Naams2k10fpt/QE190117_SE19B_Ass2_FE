@@ -111,7 +111,7 @@ export default function TaskDetailPage() {
           </div>
 
           <Link
-            href="/tasks/manage"
+            href="/admin/tasks"
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-medium hover:bg-slate-50 transition"
           >
             <Pencil className="w-3.5 h-3.5 text-slate-500" />

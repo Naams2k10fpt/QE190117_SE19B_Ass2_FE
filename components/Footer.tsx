@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
             <Link href="/search" className="hover:text-blue-600 transition">
               Search
             </Link>
-            <Link href="/tasks/manage" className="hover:text-blue-600 transition">
+            <Link href="/admin/tasks" className="hover:text-blue-600 transition">
               Tasks CRUD
             </Link>
             <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">

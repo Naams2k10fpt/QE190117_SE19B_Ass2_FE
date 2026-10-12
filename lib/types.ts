@@ -1,5 +1,21 @@
 // Types matching ASP.NET Core Backend DTOs
 
+export interface AccountDto {
+  accountId: number;
+  fullName: string;
+  email: string;
+  role: number;
+  createdDate: string;
+}
+
+export interface TokenResponseDto {
+  accessToken: string;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: string;
+  account: AccountDto;
+}
+
 export interface DepartmentListItemDto {
   departmentId: number;
   departmentName: string;
