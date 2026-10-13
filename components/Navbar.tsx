@@ -16,6 +16,7 @@ import {
   X,
   ChevronDown,
   UserRound,
+  History,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
@@ -44,6 +45,7 @@ export const Navbar: React.FC = () => {
     { label: "Projects", href: "/admin/projects", icon: FolderGit2 },
     { label: "Tasks", href: "/admin/tasks", icon: CheckSquare },
     { label: "Tags", href: "/admin/tags", icon: Tag },
+    { label: "Deletion history", href: "/admin/deletions", icon: History },
     ...(account?.role === 1 ? [{ label: "Accounts", href: "/admin/accounts", icon: Building2 }] : []),
   ];
 

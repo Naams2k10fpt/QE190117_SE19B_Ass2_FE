@@ -22,11 +22,13 @@ Run `npm test`, `npm run lint` and `npm run build` before pushing. CI runs these
 
 Authenticated users can update their name and password at `/profile`. Name changes update the navbar; password changes sign out every session and return to login. Task details show the recorded creator/updater account IDs, or "Not recorded" for legacy rows. Email and role stay read-only in the profile.
 
+Management includes **Deletion history** at `/admin/deletions`. Successful delete notifications link to the matching history; use **Undo**, then **Restore** within 24 hours. Filter by resource, status or name and review who deleted/restored each original ID. The server enforces the deadline, including requests waiting for locks. Expired/restored entries remain visible and history starts at feature activation. Restore required parents first; duplicate names/emails must be resolved before restoration. Staff can restore departments, projects, tasks and tags. Account history/restoration is Admin-only; restored accounts keep their previous role/password but require fresh login, with old sessions still revoked.
+
 ## Deployment
 
 The [live frontend](https://qe190117-se19b-ass2-fe.vercel.app) runs in the separate Vercel project `qe190117-se19b-ass2-fe`, with functions in Singapore. GitHub `main` is connected. CI triggers a project-scoped Vercel deploy hook after the main branch passes lint, tests and build; its URL is stored only in the `VERCEL_DEPLOY_HOOK` GitHub Actions secret. Both API origins point to `https://qe190117-se19b-ass2-be.onrender.com`, and Render's `FRONTEND_URL` matches this production origin. Grading credentials are provided in the submission document, never in Git.
 
-On 13 October 2026, local production builds passed 79 frontend HTTP checks and 218 backend assertions, including the profile/password and task updater bonuses. Browser checks verified live Staff registration, login/logout, Admin accounts, keyboard focus in modals and protected redirects. Test fixtures were removed and the original business data matched its pre-test snapshot. Both repositories' CI checks passed.
+The regression suites cover 88 frontend HTTP checks, 220 backend assertions and 134 deletion/undo checks, including the profile/password and task updater bonuses. Browser checks also cover management confirmations and keyboard focus. Tests use disposable fixtures and verify original data remains unchanged. See the test guide/results for the distinction between API checks and browser checks.
 
 The free Render backend can take time to wake after inactivity. Server API requests wait up to 90 seconds, with a 120-second function limit and a loading screen for server navigation. This tolerates startup delay without preventing the free service from sleeping. The reused PostgreSQL instance currently expires on 26 October 2026; the owner chose to retain this free instance, so availability after that date is not guaranteed.
 

@@ -309,6 +309,23 @@ export const tasksApi = {
 };
 
 // Tag API
+export type DeletionItem = {
+  deletionId: number; entityType: string; entityId: number; entityName: string;
+  deletedById: number; deletedAt: string; undoUntil: string; restoredAt: string | null;
+  restoredById: number | null; canRestore: boolean;
+};
+export type DeletionPage = { items: DeletionItem[]; page: number; pageSize: number; totalItems: number; serverTime: string };
+export const deletionsApi = {
+  getPage: async (resource: string, state: string, search: string, page: number): Promise<DeletionPage> => {
+    const query = new URLSearchParams({ state, page: String(page), pageSize: "20" });
+    if (resource) query.set("resource", resource);
+    if (search.trim()) query.set("search", search.trim());
+    return handleResponse<DeletionPage>(await protectedFetch(`/api/manage/deletions?${query}`, { cache: "no-store" }));
+  },
+  restore: async (id: number): Promise<{ message: string }> =>
+    handleResponse(await protectedFetch(`/api/manage/deletions/${id}/restore`, { method: "POST", headers: jsonHeaders })),
+};
+
 export const tagsApi = {
   getAll: async (): Promise<TaskTagDto[]> => {
     const res = await fetch(`${API_BASE_URL}/api/tags`, {

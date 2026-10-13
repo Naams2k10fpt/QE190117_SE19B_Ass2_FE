@@ -12,7 +12,9 @@ const adminPassword = process.env.TEST_ADMIN_PASSWORD;
 const jwtSecret = process.env.JWT_SECRET;
 assert.ok(adminEmail && adminPassword && jwtSecret && process.env.DATABASE_URL, "Configure test Admin credentials, JWT_SECRET and DATABASE_URL privately.");
 const db = new URL(process.env.DATABASE_URL);
-const pgEnv = { ...process.env, PGHOST: db.hostname, PGPORT: db.port || "5432", PGDATABASE: decodeURIComponent(db.pathname.slice(1)), PGUSER: decodeURIComponent(db.username), PGPASSWORD: decodeURIComponent(db.password), PGSSLMODE: "require", PGCONNECT_TIMEOUT: "15" };
+const dbSslMode = process.env.TEST_DB_SSLMODE || "require";
+if (dbSslMode === "disable") assert.ok(["127.0.0.1", "localhost"].includes(db.hostname), "Disable TLS only for an isolated loopback test DB.");
+const pgEnv = { ...process.env, PGHOST: db.hostname, PGPORT: db.port || "5432", PGDATABASE: decodeURIComponent(db.pathname.slice(1)), PGUSER: decodeURIComponent(db.username), PGPASSWORD: decodeURIComponent(db.password), PGSSLMODE: dbSslMode, PGCONNECT_TIMEOUT: "15" };
 function sql(query) {
   try {
     return execFileSync(process.env.TEST_PSQL_PATH || "psql", ["-X", "-w", "-t", "-A", "-v", "ON_ERROR_STOP=1", "-v", "fixture_prefix=" + prefix + "%"], { input: query, env: pgEnv, encoding: "utf8", timeout: 30000 }).trim();
@@ -48,7 +50,7 @@ try {
   const guest = new Map();
   for (const path of ["/", "/login", "/register", "/departments", "/projects", "/tags", "/search", "/departments/1", "/projects/1", "/tasks/1"])
     await request("GET", path, 200);
-  for (const path of ["/admin", "/admin/departments", "/admin/projects", "/admin/tasks", "/admin/tags", "/admin/accounts", "/profile"]) {
+  for (const path of ["/admin", "/admin/departments", "/admin/projects", "/admin/tasks", "/admin/tags", "/admin/accounts", "/admin/deletions", "/profile"]) {
     await redirect(path, "/login");
   }
   await request("POST", "/api/auth/login", 403, { email: adminEmail, password: adminPassword }, guest, "https://other.example");
@@ -56,6 +58,8 @@ try {
   await request("POST", "/api/manage/tags", 401, { tagName: prefix });
   await request("POST", "/api/manage/tags", 403, { tagName: prefix }, guest, "https://other.example");
   await request("POST", "/api/manage/auth/login", 404, { });
+  await request("GET", "/api/manage/deletions", 401);
+  await request("POST", "/api/manage/deletions/1/restore", 403, {}, guest, "https://other.example");
   await request("POST", "/api/auth/profile", 401, { fullName: prefix });
   await request("POST", "/api/auth/password", 401, { currentPassword: password, newPassword: password + "new" });
 
@@ -100,6 +104,14 @@ try {
   const auditedTask = await fetch(api + "/api/tasks/" + task.taskId);
   assert.equal(auditedTask.status, 200);
   assert.equal((await auditedTask.json()).updatedById, login.data.accountId);
+  await request("DELETE", "/api/manage/tasks/" + task.taskId, 204, undefined, staff);
+  const history = (await request("GET", "/api/manage/deletions?resource=tasks&search=" + prefix, 200, undefined, staff)).data;
+  const deletedTask = history.items.find(item => item.entityId === task.taskId);
+  assert.ok(deletedTask?.canRestore && !("snapshot" in deletedTask));
+  await request("GET", "/api/manage/deletions?resource=accounts", 403, undefined, staff);
+  await request("POST", "/api/manage/deletions/" + deletedTask.deletionId + "/restore", 403, {}, staff, "https://other.example");
+  await request("POST", "/api/manage/deletions/" + deletedTask.deletionId + "/restore", 200, {}, staff);
+  await request("POST", "/api/manage/deletions/" + deletedTask.deletionId + "/restore", 409, {}, staff);
   await request("DELETE", "/api/manage/tasks/" + task.taskId, 204, undefined, staff);
   await request("DELETE", "/api/manage/tags/" + tag.tagId, 204, undefined, staff);
 
@@ -159,6 +171,7 @@ DELETE FROM public."Tag" WHERE "TagName" LIKE :'fixture_prefix';
 DELETE FROM public."Project" WHERE "ProjectName" LIKE :'fixture_prefix';
 DELETE FROM public."Department" WHERE "DepartmentName" LIKE :'fixture_prefix';
 DELETE FROM public."SystemAccount" WHERE "Email" LIKE :'fixture_prefix';`);
+  sql(`DELETE FROM public."DeletionHistory" WHERE "EntityName" ILIKE :'fixture_prefix';`);
   assert.equal(snapshot(), baseline, "Business data must be unchanged after fixture cleanup.");
 }
 console.log(`PASS: ${count} frontend HTTP checks; public/protected pages, cookie secrecy/flags, CSRF, Staff/Admin CRUD, profile/password changes, task audit, refresh and logout; fixtures cleaned and original data unchanged.`);

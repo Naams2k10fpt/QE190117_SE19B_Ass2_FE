@@ -16,4 +16,6 @@ Fixtures have a unique prefix. Cleanup removes only those fixtures, including th
 
 The HTTP suite also covers profile redirects/validation, rejected account/role spoofing, task audit fields, password validation, revoked access/refresh tokens and cleared cookies after password changes. It changes only its disposable Staff fixture's password; grading credentials stay unchanged.
 
+Deletion checks cover the protected history page/API, forwarded filters, Staff account-history denial, restore CSRF protection, successful restore and repeated-restore conflict. Cleanup also removes the runner's own deletion history. Apply backend migration `004_deletion_history.sql` before running. `TEST_DB_SSLMODE=disable` is accepted only for an isolated loopback database; remote tests default to TLS.
+
 `npm run test:cold-start` runs the real server authentication helper against a local server that responds after 32 seconds. It confirms startup delay survives the former 30-second timeout, without credentials or production requests. Page guards may use either HTTP redirects or Next.js streaming redirects; the HTTP suite verifies the expected destination in both cases.

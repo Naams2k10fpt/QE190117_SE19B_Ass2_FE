@@ -227,7 +227,8 @@ export default function TaskManagePage() {
     try {
       setIsDeleting(true);
       await tasksApi.delete(deleteTarget.taskId);
-      success(`Task "${deleteTarget.title}" soft-deleted successfully.`);
+      success(`Task "${deleteTarget.title}" soft-deleted successfully.`,
+        { label: "Undo within 24 hours", href: `/admin/deletions?resource=tasks&search=${encodeURIComponent(deleteTarget.title)}` });
       setDeleteTarget(null);
       await handleFilterSearch();
     } catch (err: any) {
@@ -633,7 +634,7 @@ export default function TaskManagePage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteConfirm}
         title="Soft-Delete Task"
-        message={`Are you sure you want to soft-delete the task "${deleteTarget?.title}"? Its status will be marked inactive.`}
+        message={`Soft-delete the task "${deleteTarget?.title}"? It will become inactive. You can undo this within 24 hours from Deletion history.`}
         confirmText="Confirm Delete"
         isLoading={isDeleting}
       />

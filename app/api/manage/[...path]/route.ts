@@ -9,16 +9,19 @@ const error = (message: string, status: number) => NextResponse.json({ message }
 
 async function forward(request: NextRequest, context: Context) {
   const path = (await context.params).path.join("/");
-  if (!/^(departments|projects|tasks|tags|accounts)(\/\d+)?$/.test(path) ||
+  const historyRoute = (request.method === "GET" && path === "deletions") ||
+    (request.method === "POST" && /^deletions\/\d+\/restore$/.test(path));
+  if (!historyRoute && (!/^(departments|projects|tasks|tags|accounts)(\/\d+)?$/.test(path) ||
       (request.method === "GET" && !path.startsWith("accounts")) ||
-      (request.method === "POST" && (path.includes("/") || path === "accounts")))
+      (request.method === "POST" && (path.includes("/") || path === "accounts"))))
     return error("Not found.", 404);
   if (request.method !== "GET" && request.headers.get("origin") !== new URL(request.url).origin)
     return error("Invalid request origin.", 403);
   const { access } = await readTokens();
   if (!access) return error("Please log in.", 401);
   try {
-    const response = await backendFetch(`/api/${path}`, {
+    const query = historyRoute && request.method === "GET" ? request.nextUrl.search : "";
+    const response = await backendFetch(`/api/${path}${query}`, {
       method: request.method,
       headers: { Authorization: `Bearer ${access}`, "Content-Type": "application/json" },
       body: ["POST", "PUT"].includes(request.method) ? await request.text() : undefined,

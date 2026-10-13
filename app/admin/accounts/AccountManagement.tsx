@@ -43,7 +43,8 @@ export default function AccountManagement() {
     try {
       await accountsApi.delete(deleting.accountId);
       setDeleting(null);
-      success("Account deleted.");
+      success("Account deleted. Its previous sessions remain revoked.",
+        { label: "Undo within 24 hours", href: `/admin/deletions?resource=accounts&search=${encodeURIComponent(deleting.fullName)}` });
       await load();
     } catch (reason) { error(reason instanceof Error ? reason.message : "Unable to delete account."); }
     finally { setBusy(false); }
@@ -65,6 +66,6 @@ export default function AccountManagement() {
         <div className="flex justify-end gap-3"><button type="button" disabled={busy} onClick={() => setEditing(null)} className="rounded-lg border px-4 py-2">Cancel</button><button disabled={busy} className="rounded-lg bg-blue-600 px-4 py-2 text-white">{busy ? "Saving…" : "Save"}</button></div>
       </form>
     </Modal>
-    <ConfirmDialog isOpen={!!deleting} onClose={() => { if (!busy) setDeleting(null); }} onConfirm={() => { void remove(); }} title="Delete account" message={`Delete ${deleting?.fullName}? Accounts that created tasks cannot be deleted.`} isLoading={busy} />
+    <ConfirmDialog isOpen={!!deleting} onClose={() => { if (!busy) setDeleting(null); }} onConfirm={() => { void remove(); }} title="Delete account" message={`Delete ${deleting?.fullName}? Admins can undo this within 24 hours from Deletion history. Old sessions remain revoked. Accounts that created tasks cannot be deleted.`} isLoading={busy} />
   </section>;
 }

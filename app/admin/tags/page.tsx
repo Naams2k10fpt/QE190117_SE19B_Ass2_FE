@@ -141,7 +141,8 @@ export default function TagManagePage() {
     try {
       setIsDeleting(true);
       await tagsApi.delete(deleteTarget.tagId);
-      success(`Tag "${deleteTarget.tagName}" deleted successfully.`);
+      success(`Tag "${deleteTarget.tagName}" deleted successfully.`,
+        { label: "Undo within 24 hours", href: `/admin/deletions?resource=tags&search=${encodeURIComponent(deleteTarget.tagName)}` });
       setDeleteTarget(null);
       await loadTags();
     } catch (err: any) {
@@ -413,7 +414,7 @@ export default function TagManagePage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteConfirm}
         title="Delete Tag"
-        message={`Are you sure you want to delete tag "${deleteTarget?.tagName}"? Deletion is only allowed if no tasks are linked to this tag.`}
+        message={`Delete tag "${deleteTarget?.tagName}"? You can undo this within 24 hours from Deletion history. Deletion is only allowed if no tasks are linked.`}
         confirmText="Confirm Delete"
         isLoading={isDeleting}
       />

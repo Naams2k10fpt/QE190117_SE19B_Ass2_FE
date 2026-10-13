@@ -209,7 +209,8 @@ export default function ProjectManagePage() {
     try {
       setIsDeleting(true);
       await projectsApi.delete(deleteTarget.projectId);
-      success(`Project "${deleteTarget.projectName}" deleted successfully.`);
+      success(`Project "${deleteTarget.projectName}" deleted successfully.`,
+        { label: "Undo within 24 hours", href: `/admin/deletions?resource=projects&search=${encodeURIComponent(deleteTarget.projectName)}` });
       setDeleteTarget(null);
       await handleFilterSearch();
     } catch (err: any) {
@@ -578,7 +579,7 @@ export default function ProjectManagePage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteConfirm}
         title="Delete Project"
-        message={`Are you sure you want to delete the project "${deleteTarget?.projectName}"? Note: If any tasks are linked to this project, deletion will be rejected.`}
+        message={`Delete the project "${deleteTarget?.projectName}"? You can undo this within 24 hours from Deletion history. If any tasks are linked, deletion will be rejected.`}
         confirmText="Confirm Delete"
         isLoading={isDeleting}
       />

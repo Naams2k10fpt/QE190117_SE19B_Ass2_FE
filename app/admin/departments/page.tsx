@@ -146,6 +146,7 @@ export default function DepartmentManagePage() {
       await departmentsApi.delete(deleteTarget.departmentId);
       success(
         `Department "${deleteTarget.departmentName}" deleted successfully.`,
+        { label: "Undo within 24 hours", href: `/admin/deletions?resource=departments&search=${encodeURIComponent(deleteTarget.departmentName)}` },
       );
       setDeleteTarget(null);
       await loadDepartments();
@@ -411,7 +412,7 @@ export default function DepartmentManagePage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteConfirm}
         title="Delete Department"
-        message={`Are you sure you want to permanently delete the department "${deleteTarget?.departmentName}"? Note: If any projects are currently linked to this department, deletion will be rejected.`}
+        message={`Delete the department "${deleteTarget?.departmentName}"? You can undo this within 24 hours from Deletion history. If any projects are linked, deletion will be rejected.`}
         confirmText="Confirm Delete"
         isLoading={isDeleting}
       />

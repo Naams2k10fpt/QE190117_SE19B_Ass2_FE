@@ -2,18 +2,21 @@
 
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
+import Link from "next/link";
 
 export type ToastType = "success" | "error" | "info";
+export type ToastAction = { label: string; href: string };
 
 export interface ToastItem {
   id: string;
   type: ToastType;
   message: string;
+  action?: ToastAction;
 }
 
 interface ToastContextValue {
-  showToast: (message: string, type?: ToastType) => void;
-  success: (message: string) => void;
+  showToast: (message: string, type?: ToastType, action?: ToastAction) => void;
+  success: (message: string, action?: ToastAction) => void;
   error: (message: string) => void;
   info: (message: string) => void;
 }
@@ -30,19 +33,19 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const showToast = useCallback(
-    (message: string, type: ToastType = "info") => {
+    (message: string, type: ToastType = "info", action?: ToastAction) => {
       const id = Math.random().toString(36).substring(2, 9);
-      setToasts((prev) => [...prev, { id, type, message }]);
+      setToasts((prev) => [...prev, { id, type, message, action }]);
 
       setTimeout(() => {
         removeToast(id);
-      }, 4000);
+      }, action ? 8000 : 4000);
     },
     [removeToast]
   );
 
   const success = useCallback(
-    (msg: string) => showToast(msg, "success"),
+    (msg: string, action?: ToastAction) => showToast(msg, "success", action),
     [showToast]
   );
   const error = useCallback(
@@ -54,7 +57,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <ToastContext.Provider value={{ showToast, success, error, info }}>
       {children}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 max-w-md w-full px-4 pointer-events-none">
+      <div className="fixed bottom-5 inset-x-4 sm:left-auto sm:right-5 z-50 flex flex-col space-y-2 sm:max-w-md sm:w-full pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
@@ -77,7 +80,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                 <Info className="w-5 h-5 text-sky-600" />
               )}
             </div>
-            <div className="flex-1 font-medium">{toast.message}</div>
+            <div className="min-w-0 flex-1 font-medium wrap-anywhere">{toast.message}
+              {toast.action && <Link href={toast.action.href} prefetch={false} className="mt-2 block font-semibold text-blue-700 underline">{toast.action.label}</Link>}
+            </div>
             <button
               onClick={() => removeToast(toast.id)}
               className="text-gray-400 hover:text-gray-600 p-0.5 rounded-sm transition"
