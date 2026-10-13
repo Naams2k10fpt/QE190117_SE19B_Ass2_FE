@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { KanbanSquare, CheckCircle, Github } from "lucide-react";
+import { KanbanSquare, Activity } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
             <span className="text-xs text-slate-400">| PRN232 Assignment 2</span>
           </div>
 
-          <div className="flex items-center gap-6 text-sm text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
             <Link href="/departments" className="hover:text-blue-600 transition">
               Departments
             </Link>
@@ -23,10 +23,15 @@ export const Footer: React.FC = () => {
             <Link href="/admin/tasks" className="hover:text-blue-600 transition">
               Tasks CRUD
             </Link>
-            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-              <CheckCircle className="w-3.5 h-3.5" />
-              API Connected
-            </span>
+            <a
+              href={`${(process.env.NEXT_PUBLIC_API_URL || "http://localhost:5117").replace(/\/$/, "")}/api/health`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 hover:bg-blue-100 transition"
+            >
+              <Activity className="w-3.5 h-3.5" />
+              API health
+            </a>
           </div>
         </div>
         <div className="mt-4 pt-4 border-t border-slate-100 text-center text-xs text-slate-400">
