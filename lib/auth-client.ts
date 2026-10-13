@@ -12,10 +12,11 @@ async function refreshSession(): Promise<boolean> {
     if (!response.ok && response.status !== 401) throw new Error("Unable to refresh the session. Try again shortly.");
     return response.ok;
   };
-  // shortcut: without Web Locks, refresh is coordinated in one tab only; add shared coordination if supporting older browsers.
+  // Require a cross-tab lock before rotating a shared cookie. Unsupported browsers
+  // must sign in again after expiry instead of risking refresh-token replay.
   const coordinated = async () => navigator.locks
     ? await navigator.locks.request("tasktrack-refresh", refresh)
-    : await refresh();
+    : false;
   refreshing = coordinated().finally(() => { refreshing = null; });
   return refreshing;
 }

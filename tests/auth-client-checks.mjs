@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 const code = readFileSync(new URL("../.checks/auth-client.js", import.meta.url), "utf8");
-function browser(state, locks) {
+function browser(state, locks = { request: (_name, callback) => callback() }) {
   const exports = {};
   vm.runInNewContext(code, {
     exports, navigator: { locks }, Response,
@@ -72,3 +72,16 @@ const state = () => ({ authenticated: false, refreshes: 0, writes: 0, redirects:
   assert.equal(s.redirects.length, 0, "An API outage must not be treated as logout.");
 }
 console.log("PASS: guest sessions, one retry, same-tab/cross-tab coordination, 401 redirect, 403 preservation and outage handling.");
+{
+  const s = state();
+  const tabs = [browser(s, null), browser(s, null)];
+  const responses = await Promise.all(tabs.map(tab => tab.protectedFetch("/write")));
+  assert.ok(responses.every(r => r.status === 401));
+  assert.equal(s.refreshes, 0, "Without Web Locks, no tab may rotate the shared refresh cookie.");
+  assert.deepEqual(s.redirects, ["/login", "/login"]);
+  assert.equal(await tabs[0].loadSession(), null, "Guests on unsupported browsers remain guests without redirect loops.");
+  s.authenticated = true;
+  assert.ok(await tabs[1].loadSession(), "Valid access tokens still work without Web Locks.");
+  assert.equal((await tabs[1].protectedFetch("/write")).status, 200);
+}
+console.log("PASS: browsers without Web Locks retain valid access and require sign-in at expiry without replaying refresh.");
