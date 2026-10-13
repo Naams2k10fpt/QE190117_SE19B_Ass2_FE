@@ -212,7 +212,7 @@ export default function DepartmentManagePage() {
             setSearchFilter(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full text-sm bg-transparent border-none focus:outline-hidden placeholder-slate-400"
+          className="min-w-0 flex-1 text-sm bg-transparent border-none focus:outline-hidden placeholder-slate-400"
         />
         {searchFilter && (
           <button
@@ -220,7 +220,7 @@ export default function DepartmentManagePage() {
               setSearchFilter("");
               setCurrentPage(1);
             }}
-            className="text-xs text-slate-400 hover:text-slate-600 font-medium px-2 py-1"
+            className="shrink-0 whitespace-nowrap text-xs text-slate-400 hover:text-slate-600 font-medium px-2 py-1"
           >
             Clear
           </button>
