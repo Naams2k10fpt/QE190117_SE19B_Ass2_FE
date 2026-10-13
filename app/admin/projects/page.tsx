@@ -297,14 +297,16 @@ export default function ProjectManagePage() {
         <div className="flex gap-2">
           <button
             onClick={handleFilterSearch}
-            className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-medium transition"
+            disabled={loading}
+            className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-medium transition disabled:opacity-50 disabled:cursor-wait"
           >
             Apply Filter
           </button>
           {(nameFilter || statusFilter !== "" || deptFilter !== "") && (
             <button
               onClick={clearFilters}
-              className="px-3 py-2 text-slate-500 hover:text-slate-800 text-sm font-medium transition"
+              disabled={loading}
+              className="px-3 py-2 text-slate-500 hover:text-slate-800 text-sm font-medium transition disabled:opacity-50 disabled:cursor-wait"
             >
               Reset
             </button>
