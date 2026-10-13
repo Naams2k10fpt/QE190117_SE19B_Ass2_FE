@@ -44,7 +44,7 @@ export default function ProfileForm({ initialAccount }: { initialAccount: Accoun
     <div><h1 className="text-3xl font-bold">My profile</h1><p className="mt-2 text-slate-500">Update your name or change your password.</p></div>
     <form onSubmit={saveName} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
       <h2 className="text-xl font-semibold">Account details</h2>
-      <p className="break-all text-sm text-slate-500">{initialAccount.email} · {initialAccount.role === 1 ? "Admin" : "Staff"}</p>
+      <p className="text-sm text-slate-500">{initialAccount.email} · {initialAccount.role === 1 ? "Admin" : "Staff"}</p>
       <label className="block text-sm font-medium">Full name<input required maxLength={100} autoComplete="name" value={fullName} onChange={e => setFullName(e.target.value)} className={inputClass} /></label>
       {nameError && <p role="alert" className="text-sm text-red-600">{nameError}</p>}
       <button disabled={busy} className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white disabled:opacity-50">Save name</button>
